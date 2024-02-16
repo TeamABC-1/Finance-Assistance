@@ -5,13 +5,14 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from nltk.probability import FreqDist
 import PyPDF2
+from io import BytesIO
 
 nltk.download('punkt')
 nltk.download('stopwords')
 
 # Function to extract important sentences from a PDF based on keywords
 def extract_important_sentences_from_pdf(file, keywords):
-    pdf_reader = PyPDF2.PdfReader(file)
+    pdf_reader = PyPDF2.PdfReader(BytesIO(file.read()))
     important_sentences = []
 
     for page in pdf_reader.pages:
