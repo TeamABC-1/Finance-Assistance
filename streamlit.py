@@ -52,5 +52,5 @@ def main():
         st.subheader("Important Sentences:")
         st.text(important_sentences[:500])
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     main()
