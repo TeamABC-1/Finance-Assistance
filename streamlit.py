@@ -36,7 +36,7 @@ def extract_important_sentences_from_pdf(uploaded_file, keywords):
 
 # Streamlit app
 def main():
-    st.title("PDF Text Extraction and Summarization")
+    st.title("Document analyser")
 
     # File upload widget
     uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
