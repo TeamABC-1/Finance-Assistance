@@ -5,31 +5,34 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from nltk.probability import FreqDist
 import PyPDF2
+import io
 
 nltk.download('punkt')
 nltk.download('stopwords')
 
 # Function to extract important sentences from a PDF based on keywords
-def extract_important_sentences_from_pdf(pdf_path, keywords):
-    with open(pdf_path, 'rb') as file:
-        pdf_reader = PyPDF2.PdfReader(file)
-        important_sentences = []
+def extract_important_sentences_from_pdf(uploaded_file, keywords):
+    pdf_reader = PyPDF2.PdfFileReader(uploaded_file)
 
-        for page in pdf_reader.pages:
-            page_text = page.extract_text()
-            sentences = sent_tokenize(page_text)
-            words = word_tokenize(page_text)
-            stop_words = set(stopwords.words('english'))
-            words = [word for word in words if word.lower() not in stop_words]
+    important_sentences = []
 
-            fdist = FreqDist(words)
+    for page_number in range(pdf_reader.numPages):
+        page = pdf_reader.getPage(page_number)
+        page_text = page.extractText()
 
-            for sentence in sentences:
-                if any(keyword.lower() in sentence.lower() for keyword in keywords):
-                    important_sentences.append(sentence)
+        sentences = sent_tokenize(page_text)
+        words = word_tokenize(page_text)
+        stop_words = set(stopwords.words('english'))
+        words = [word for word in words if word.lower() not in stop_words]
 
-        important_sentences_text = '\n'.join(important_sentences)
-        return important_sentences_text
+        fdist = FreqDist(words)
+
+        for sentence in sentences:
+            if any(keyword.lower() in sentence.lower() for keyword in keywords):
+                important_sentences.append(sentence)
+
+    important_sentences_text = '\n'.join(important_sentences)
+    return important_sentences_text
 
 # Streamlit app
 def main():
@@ -54,3 +57,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+       
+
