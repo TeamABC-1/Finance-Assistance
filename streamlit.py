@@ -4,7 +4,7 @@ import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from nltk.probability import FreqDist
-import fitz  # PyMuPDF
+import PyPDF2
 from io import BytesIO
 
 nltk.download('punkt')
@@ -12,12 +12,12 @@ nltk.download('stopwords')
 
 # Function to extract important sentences from a PDF based on keywords
 def extract_important_sentences_from_pdf(file, keywords):
-    pdf_reader = fitz.open(stream=BytesIO(file.read()), filetype="pdf")
+    pdf_reader = PyPDF2.PdfReader(file)
     important_sentences = []
 
-    for page_number in range(pdf_reader.page_count):
-        page = pdf_reader[page_number]
-        page_text = page.get_text()
+    for page_number in range(len(pdf_reader.pages)):
+        page = pdf_reader.pages[page_number]
+        page_text = page.extract_text()
         sentences = sent_tokenize(page_text)
         words = word_tokenize(page_text)
         stop_words = set(stopwords.words('english'))
